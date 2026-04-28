@@ -1,125 +1,169 @@
 # FLO Customer Segmentation with Unsupervised Learning
-# FLO Customer Segmentation with Unsupervised Learning
 
 ## Overview
 
-This project focuses on customer segmentation for FLO, an omnichannel retail company.  
-The objective is to identify distinct customer groups based on historical shopping behavior and support more targeted, data-driven marketing strategies.
+This project focuses on segmenting FLO customers based on their historical shopping behavior using unsupervised learning techniques.
 
-Two unsupervised learning approaches are used:
+The main objective is to move beyond raw transactional data and create meaningful, interpretable customer groups that can be directly used in marketing and business decision-making.
+
+Two clustering approaches are applied:
 
 - K-Means Clustering  
 - Hierarchical Clustering  
 
-The emphasis is not only on building clustering models, but also on producing segments that are interpretable and actionable from a business perspective.
+The emphasis of the project is not only on clustering performance but also on producing **actionable and business-relevant segments**.
 
 ---
 
 ## Dataset
 
-The dataset contains historical transaction data of FLO customers who made purchases in 2020–2021 across both online and offline channels.
+The dataset contains customer transaction data from FLO, covering purchases made in 2020–2021 across both online and offline channels.
 
 - **Observations:** 19,945  
 - **Variables:** 12  
 
 ### Key Variables
 
-- `master_id`: Unique customer identifier  
-- `order_channel`: Platform used for shopping  
-- `first_order_date` / `last_order_date`: Customer lifecycle information  
 - `order_num_total_ever_online` / `offline`: Purchase frequency  
 - `customer_value_total_ever_online` / `offline`: Monetary value  
+- `first_order_date` / `last_order_date`: Customer lifecycle  
 - `interested_in_categories_12`: Product category engagement  
 
 ---
 
 ## Feature Engineering
 
-To better represent customer behavior, additional features were created:
+To better represent customer behavior, several additional features were created:
 
-- **Recency:** Days since last purchase  
-- **Tenure:** Customer lifetime (days)  
-- **Total Order Count:** Online + offline frequency  
-- **Total Customer Value:** Combined spending  
-- **Average Order Value:** Spending per transaction  
+- **Recency** → Days since last purchase  
+- **Tenure** → Customer lifetime  
+- **Total Order Count** → Overall purchase frequency  
+- **Total Customer Value** → Total spending  
+- **Average Order Value** → Spending per transaction  
 
-These features provide a more complete view of customer engagement and value.
-
----
-
-## Methodology
-
-### 1. Data Preprocessing
-
-- Date variables converted to datetime format  
-- Skewness analyzed for all numerical features  
-- Log transformation applied to reduce right-skewness  
-- Features standardized using `StandardScaler`  
+These features provide a more complete behavioral representation compared to raw variables.
 
 ---
 
-### 2. K-Means Clustering
+## Data Preparation
 
-- Elbow Method used to evaluate WCSS across different cluster sizes  
-- Silhouette Score used as an additional validation metric  
+Customer-related variables showed significant right-skewness, especially monetary features.
 
-Although **k=2** produced the highest silhouette score, it resulted in overly broad customer groups.  
-To achieve more granular and actionable segmentation, **k=7** was selected by considering:
+### Before Transformation
 
-- Elbow curve behavior  
-- Silhouette scores  
-- Business interpretability  
-
----
-
-### 3. Hierarchical Clustering
-
-- Ward linkage applied to minimize within-cluster variance  
-- Dendrogram used to analyze cluster structure  
-- Results compared with K-Means to validate segmentation consistency  
-
----
-
-## Visualizations
-
-### Distribution Before Transformation
 ![Before](outputs/before_transform.png)
 
-### Distribution After Transformation
-![After](outputs/after_transform.png)
-
-### Elbow Method
-![Elbow](outputs/elbow_method.png)
-
-### Hierarchical Clustering Dendrogram
-![Dendrogram](outputs/hierarchical_dendrogram.png)
+- Strong right skew is visible  
+- A small number of customers dominate spending  
+- Raw data is not suitable for distance-based clustering  
 
 ---
 
-## Key Insights
+### After Log Transformation
 
-- **High Value Customers:**  
-  High purchase frequency and spending → suitable for loyalty programs and premium campaigns  
+![After](outputs/after_transform.png)
 
-- **Loyal Customers:**  
-  Consistent engagement across channels → ideal for personalized recommendations  
+- Distributions become more symmetric  
+- Extreme values are compressed  
+- Data becomes more suitable for clustering  
 
-- **High Basket Customers:**  
-  Higher spending per transaction but lower frequency → potential for frequency-based campaigns  
+---
 
-- **Low Value Customers:**  
-  Low engagement and spending → require cautious, cost-effective reactivation strategies  
+## Clustering Strategy
 
-- **New / Potential Customers:**  
-  Lower tenure but growth potential → onboarding and engagement campaigns recommended  
+### Elbow Method
+
+![Elbow](outputs/elbow_method.png)
+
+- WCSS decreases rapidly until **k ≈ 6–7**  
+- After that point, improvement slows down  
+- This indicates diminishing returns in adding more clusters  
+
+---
+
+### Silhouette Score
+
+- Highest score observed at **k=2**  
+- However, this creates overly broad and non-actionable segments  
+
+---
+
+### Final Decision
+
+Instead of relying purely on mathematical metrics:
+
+> **k = 7 was selected to balance model performance and business interpretability**
+
+This allows:
+
+- More granular segmentation  
+- Better marketing usability  
+- More realistic customer grouping  
+
+---
+
+## K-Means Segmentation Results
+
+The final segmentation reveals clear behavioral differences across customer groups.
+
+### High Value Customers
+- Highest total spending and purchase frequency  
+- Represent the core revenue-driving segment  
+- **Strategy:** loyalty programs, VIP campaigns, premium offers  
+
+---
+
+### Loyal Customers
+- Consistent purchasing behavior across channels  
+- High engagement over time  
+- **Strategy:** personalized recommendations, retention campaigns  
+
+---
+
+### High Basket Customers
+- High average order value but lower frequency  
+- Spend more per transaction  
+- **Strategy:** increase purchase frequency (reminders, promotions)  
+
+---
+
+### Mid Value Customers
+- Moderate frequency and spending  
+- Growth potential exists  
+- **Strategy:** cross-sell and basket expansion  
+
+---
+
+### New Customers
+- Low tenure and lower frequency  
+- Early stage in lifecycle  
+- **Strategy:** onboarding and engagement campaigns  
+
+---
+
+### Low Value Customers
+- Low spending and low engagement  
+- Limited short-term ROI  
+- **Strategy:** low-cost reactivation campaigns  
+
+---
+
+## Hierarchical Clustering
+
+![Dendrogram](outputs/hierarchical_dendrogram.png)
+
+- Dendrogram confirms natural grouping structure  
+- Supports the segmentation tendency observed in K-Means  
+- Provides additional validation of cluster formation  
 
 ---
 
 ## Model Comparison
 
-K-Means produced clearer and more interpretable segments, making it more suitable for practical business applications.
+- **K-Means** → clearer, more scalable, easier to interpret  
+- **Hierarchical Clustering** → useful for structural validation  
 
-Hierarchical Clustering supported the analysis by revealing the underlying structure and confirming segmentation tendencies.
+K-Means is selected as the primary model due to its practicality in real-world applications.
 
 ---
 
@@ -127,7 +171,12 @@ Hierarchical Clustering supported the analysis by revealing the underlying struc
 
 Customer segmentation should not rely solely on statistical metrics.
 
-While metrics like Silhouette Score provide guidance, selecting the optimal number of clusters also requires considering interpretability and business usability.
+While methods like Silhouette Score provide guidance,  
+the final decision must also consider:
+
+- Interpretability  
+- Business usability  
+- Actionability  
 
 ---
 
@@ -143,13 +192,6 @@ While metrics like Silhouette Score provide guidance, selecting the optimal numb
 ---
 
 ## How to Run
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-
-Install dependencies:
 
 ```bash
 pip install -r requirements.txt
