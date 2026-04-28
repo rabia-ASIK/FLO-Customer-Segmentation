@@ -106,6 +106,21 @@ This allows:
 
 The final segmentation reveals clear behavioral differences across customer groups.
 
+### Customer Value Distribution by Segment
+
+![Segment Value](outputs/segment_value_boxplot.png)
+
+The boxplot illustrates the distribution of total customer value across different segments.
+
+Clear separation can be observed between high-value and low-value customer groups.  
+Certain segments show significantly higher median values and wider variability, indicating both strong engagement and diverse spending behavior.
+
+Lower-value segments are more tightly distributed, suggesting limited spending and lower overall engagement.
+
+This visualization supports the segmentation results by confirming that the clustering model successfully differentiates customers based on their economic value.
+
+---
+
 ### High Value Customers
 - Highest total spending and purchase frequency  
 - Represent the core revenue-driving segment  
@@ -158,6 +173,7 @@ The final segmentation reveals clear behavioral differences across customer grou
 
 ---
 
+
 ## Model Comparison
 
 - **K-Means** → clearer, more scalable, easier to interpret  
@@ -180,6 +196,18 @@ the final decision must also consider:
 
 ---
 
+## Results Summary
+
+The final K-Means model was built with 7 clusters.
+
+Key observations:
+
+- The highest-value customer group had the highest total customer value and purchase frequency.
+- Lower-value segments showed lower spending and weaker engagement.
+- K-Means produced more interpretable and actionable segments compared to Hierarchical Clustering.
+
+ ---
+
 ## Technologies Used
 
 - Python  
@@ -195,3 +223,9 @@ the final decision must also consider:
 
 ```bash
 pip install -r requirements.txt
+python FLO_Unsupervised_Learning.py
+
+## Dataset Note
+
+The dataset is not included in this repository.  
+To run the project, place `flo_data_20k.csv` in the project root directory.
