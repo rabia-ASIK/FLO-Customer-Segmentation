@@ -1,4 +1,5 @@
 # FLO Customer Segmentation with Unsupervised Learning
+# FLO Customer Segmentation with Unsupervised Learning
 
 ## Overview
 
@@ -142,6 +143,11 @@ While metrics like Silhouette Score provide guidance, selecting the optimal numb
 ---
 
 ## How to Run
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
 
 Install dependencies:
 
